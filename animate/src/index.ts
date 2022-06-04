@@ -2,9 +2,10 @@ import { KeyDisplay } from './utils';
 import { CharacterControls } from './characterControls';
 import * as THREE from 'three'
 import { CameraHelper } from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 // SCENE
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xa8def0);
@@ -57,7 +58,7 @@ new GLTFLoader().load('models/Soldier.glb', function (gltf) {
 });
 
 // MODEL 1
-const loader = new GLTFLoader().setPath( 'models/pikachu/' );
+const loader = new GLTFLoader().setPath('models/pikachu/');
 loader.load( 'pikachu.gltf', function ( gltf ) {
     const model1 = gltf.scene;
     model1.traverse(function (object: any) {
@@ -65,9 +66,32 @@ loader.load( 'pikachu.gltf', function ( gltf ) {
     });
     model1.scale.set(0.5,0.5,0.5);
     model1.position.setY(Math.PI/2 - 0.3);
+    model1.position.setZ(5);
 	scene.add( model1 );
 
 } );
+
+// MODEL 1
+new MTLLoader()
+	.setPath( 'models/charizard/' )
+	.load( 'charizard.mtl', function ( materials ) {
+
+			materials.preload();
+
+			new OBJLoader()
+				.setMaterials( materials )
+				.setPath( 'models/charizard/' )
+				.load( 'charizard.obj', function ( object ) {
+                    object.traverse(function (object: any) {
+                        if (object.isMesh) object.castShadow = true;
+                    });
+					object.scale.set(0.5,0.5,0.5);
+                    object.position.setY(Math.PI/2 - 0.7);
+					scene.add( object );
+
+				}, onprogress );
+
+		} );
 
 // CONTROL KEYS
 const keysPressed = {  }
