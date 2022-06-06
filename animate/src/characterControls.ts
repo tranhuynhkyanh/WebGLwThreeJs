@@ -1,5 +1,8 @@
 import * as THREE from 'three'
+import { Loader, Vector3 } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { bb1, bb2 } from '.'
+// import { modelPikachu, modelCharizard } from '.'
 import { A, D, DIRECTIONS, S, W } from './utils'
 
 
@@ -94,12 +97,35 @@ export class CharacterControls {
             const velocity = this.currentAction == 'Run' ? this.runVelocity : this.walkVelocity
 
             // move model & camera
-            const moveX = this.walkDirection.x * velocity * delta
-            const moveZ = this.walkDirection.z * velocity * delta
+            this.moveMC(velocity,delta)
+            
+            
+        }
+    }
+
+    public moveMC(velocity: number,delta: number){
+        var listbb:THREE.Vector3[]
+        listbb = [bb1.max,bb2.max]
+        var bbox = new THREE.Box3().setFromObject(this.model);
+        const moveX = this.walkDirection.x * velocity * delta
+        const moveZ = this.walkDirection.z * velocity * delta
+        var vectorColision = new THREE.Vector3(moveX,0,moveZ)
+        const arrCheck = [true]
+        bbox.max.add(vectorColision)
+        for (var vector of listbb){
+            const d = bbox.max.distanceTo( vector);
+            if (d < 1.5){
+                arrCheck.push(false);
+            }
+    
+        }
+        console.log(arrCheck.length)
+        if(arrCheck.length<2){
             this.model.position.x += moveX
             this.model.position.z += moveZ
-            this.updateCameraTarget(moveX, moveZ)
+            this.updateCameraTarget(moveX, moveZ) 
         }
+        
     }
 
     private updateCameraTarget(moveX: number, moveZ: number) {

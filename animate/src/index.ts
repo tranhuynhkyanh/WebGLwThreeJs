@@ -41,37 +41,38 @@ generateFloor()
 // MODEL WITH ANIMATIONS
 var characterControls: CharacterControls
 new GLTFLoader().load('models/Soldier.glb', function (gltf) {
-    const model = gltf.scene;
+    var model = gltf.scene;
     model.traverse(function (object: any) {
         if (object.isMesh) object.castShadow = true;
     });
     scene.add(model);
-
     const gltfAnimations: THREE.AnimationClip[] = gltf.animations;
     const mixer = new THREE.AnimationMixer(model);
     const animationsMap: Map<string, THREE.AnimationAction> = new Map()
     gltfAnimations.filter(a => a.name != 'TPose').forEach((a: THREE.AnimationClip) => {
         animationsMap.set(a.name, mixer.clipAction(a))
     })
-
     characterControls = new CharacterControls(model, mixer, animationsMap, orbitControls, camera,  'Idle')
 });
 
+
 // MODEL 1
+export var bb1: any;
 const loader = new GLTFLoader().setPath('models/pikachu/');
 loader.load( 'pikachu.gltf', function ( gltf ) {
-    const model1 = gltf.scene;
+    var model1 = gltf.scene;
     model1.traverse(function (object: any) {
         if (object.isMesh) object.castShadow = true;
     });
     model1.scale.set(0.5,0.5,0.5);
     model1.position.setY(Math.PI/2 - 0.3);
-    model1.position.setZ(5);
+    model1.position.setZ(-10);
+    bb1 = new THREE.Box3().setFromObject(model1);
 	scene.add( model1 );
-
 } );
 
-// MODEL 1
+// MODEL 2
+export var bb2: any;
 new MTLLoader()
 	.setPath( 'models/charizard/' )
 	.load( 'charizard.mtl', function ( materials ) {
@@ -87,11 +88,14 @@ new MTLLoader()
                     });
 					object.scale.set(0.5,0.5,0.5);
                     object.position.setY(Math.PI/2 - 0.7);
+                    object.position.setZ(-5);
+                    bb2 = new THREE.Box3().setFromObject(object);
 					scene.add( object );
 
 				}, onprogress );
 
 		} );
+
 
 // CONTROL KEYS
 const keysPressed = {  }
@@ -122,8 +126,6 @@ function animate() {
 }
 document.body.appendChild(renderer.domElement);
 animate();
-
-// RESIZE HANDLER
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
