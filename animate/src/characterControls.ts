@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { Loader, Vector3 } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { bb1, bb2 } from '.'
+import { bb1, bb2, bb3 } from '.'
 // import { modelPikachu, modelCharizard } from '.'
 import { A, D, DIRECTIONS, S, W } from './utils'
 
@@ -44,7 +44,7 @@ export class CharacterControls {
         })
         this.orbitControl = orbitControl
         this.camera = camera
-        this.updateCameraTarget(0,0)
+        this.updateCameraTarget(1.13,31)
     }
 
     public switchRunToggle() {
@@ -105,7 +105,7 @@ export class CharacterControls {
 
     public moveMC(velocity: number,delta: number){
         var listbb:THREE.Vector3[]
-        listbb = [bb1.max,bb2.max]
+        listbb = [bb1.max,bb2.max,bb3.max]
         var bbox = new THREE.Box3().setFromObject(this.model);
         const moveX = this.walkDirection.x * velocity * delta
         const moveZ = this.walkDirection.z * velocity * delta
@@ -113,14 +113,21 @@ export class CharacterControls {
         const arrCheck = [true]
         bbox.max.add(vectorColision)
         for (var vector of listbb){
-            const d = bbox.max.distanceTo( vector);
+            var vector1 = new THREE.Vector2(vector.x,vector.z)
+            var vector2 = new THREE.Vector2(bbox.max.x,bbox.max.z)
+            const d = vector1.distanceTo( vector2);
             if (d < 1.5){
                 arrCheck.push(false);
             }
+            
+            // if (bbox.intersectsBox(vector)){
+            //     arrCheck.push(false);
+            // }
     
         }
         console.log(arrCheck.length)
         if(arrCheck.length<2){
+            // console.log(this.model.position)
             this.model.position.x += moveX
             this.model.position.z += moveZ
             this.updateCameraTarget(moveX, moveZ) 

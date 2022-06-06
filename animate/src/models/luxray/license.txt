@@ -1,0 +1,11 @@
+Model Information:
+* title:	Luxray
+* source:	https://sketchfab.com/3d-models/luxray-7c6a2c3957d7437691a3f8125f362756
+* author:	Gianmarco (https://sketchfab.com/GianmArt)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Luxray" (https://sketchfab.com/3d-models/luxray-7c6a2c3957d7437691a3f8125f362756) by Gianmarco (https://sketchfab.com/GianmArt) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
