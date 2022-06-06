@@ -104,28 +104,22 @@ export class CharacterControls {
     }
 
     public moveMC(velocity: number,delta: number){
-        var listbb:THREE.Vector3[]
-        listbb = [bb1.max,bb2.max,bb3.max]
+        const arrCheck = [true]
+        var listbb:THREE.Box3[]
+        listbb = [bb1,bb2,bb3]
         var bbox = new THREE.Box3().setFromObject(this.model);
         const moveX = this.walkDirection.x * velocity * delta
         const moveZ = this.walkDirection.z * velocity * delta
         var vectorColision = new THREE.Vector3(moveX,0,moveZ)
-        const arrCheck = [true]
         bbox.max.add(vectorColision)
-        for (var vector of listbb){
-            var vector1 = new THREE.Vector2(vector.x,vector.z)
-            var vector2 = new THREE.Vector2(bbox.max.x,bbox.max.z)
-            const d = vector1.distanceTo( vector2);
-            if (d < 1.5){
+        bbox.min.add(vectorColision)
+        var bbox1 = new THREE.Box3(bbox.min,bbox.max)
+        for (var bbox2 of listbb){
+            if (bbox1.intersectsBox(bbox2)){
                 arrCheck.push(false);
             }
-            
-            // if (bbox.intersectsBox(vector)){
-            //     arrCheck.push(false);
-            // }
     
         }
-        console.log(arrCheck.length)
         if(arrCheck.length<2){
             // console.log(this.model.position)
             this.model.position.x += moveX
